@@ -1,0 +1,27 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: e4k-repo
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  type: oci
+  url: oci://e4kpreview.azurecr.io/helm
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: e4k-release
+  namespace: flux-system
+spec:
+  releaseName: e4k
+  targetNamespace: default
+  chart:
+    spec:
+      chart: az-e4k
+      sourceRef:
+        kind: HelmRepository
+        name: e4k-repo
+      version: 0.1.0-amd64
+  interval: 1m0s
